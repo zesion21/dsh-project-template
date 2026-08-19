@@ -1,6 +1,6 @@
 # 项目状态追踪
 
-> 维护规则：每次 Codex 完成功能、代码、文档或配置修改后，必须更新本文件（AGENTS.md 硬约束 #26）。
+> 维护规则：每次 DSH 完成功能、代码、文档或配置修改后，必须更新本文件（AGENTS.md 硬约束 #26）。
 > 最后更新：{{ YYYY-MM-DD }}
 
 ## 项目概况
@@ -32,4 +32,5 @@
 
 | 日期 | 变更人 | 变更内容 | 涉及文件/模块 | 版本 |
 | ---- | ------ | -------- | ------------- | ---- |
-| {{ YYYY-MM-DD }} | {{ Codex / 姓名 }} | {{ 本次改动的核心内容 }} | {{ 文件或模块 }} | {{ v0.1.0 }} |
+| {{ YYYY-MM-DD }} | {{ DSH / 姓名 }} | {{ 本次改动的核心内容 }} | {{ 文件或模块 }} | {{ v0.1.0 }} |
+| {{ YYYY-MM-DD }} | DSH 迁移 | 模板从 Codex 迁移到 DeepSeek Harness：技能移至 .dsh/skills、MCP 改为 cordis.patch.yml、AGENTS.md/README/脚本同步更新 | .dsh/skills、cordis.patch.yml、AGENTS.md、README.md、scripts/ | {{ v1.0.0 }} |

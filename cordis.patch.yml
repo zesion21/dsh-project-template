@@ -1,0 +1,72 @@
+# DeepSeek Harness MCP 服务器配置（patch 层）
+#
+# 用法：在项目根目录启动 dsh 时挂载本文件：
+#   dsh web --patch ./cordis.patch.yml
+# 或把下列条目合并进 $DSH_HOME/profiles/<profile>/cordis.patch.yml（仅对该 profile 生效）；
+# 要对本机所有 profile 生效则合并进 $DSH_HOME/cordis.patch.yml（home 级）。
+#
+# 说明：
+# - 每个 MCP 服务器是 @deepseek-ai/dsh-mcp-client 插件的一条配置（stdio 传输），
+#   必须放在 insert 列表里才会新增挂载；可用 `dsh web --dump-config` 复核生效配置
+# - 服务器命令是可信可执行代码，仅在需要时启用；不需要的服务请整段注释
+# - 密钥一律通过 !!js process.env.XXX 从环境变量注入，禁止硬编码（见 AGENTS.md 硬约束 #1）
+# - 工具在模型侧命名为 mcp__<serverName>__<rawName>，如 mcp__fetch__fetch
+
+- insert:
+    # ---------- Word 文档创建、填充、格式转换 ----------
+    - id: mcp-docx
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: docx
+        transport: stdio
+        command: uvx
+        args: ['docx-mcp']
+
+    # ---------- RAG 知识库检索、语义搜索 ----------
+    # 需要先部署 ragflow-mcp 服务（路径见下），并设置环境变量 RAGFLOW_API_KEY、RAGFLOW_URL
+    - id: mcp-ragflow
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: ragflow
+        transport: stdio
+        command: uv
+        args: ['run', '--directory', 'D:/ragflow-mcp', 'python', '-m', 'src.server']
+        env:
+          RAGFLOW_API_KEY: !!js process.env.RAGFLOW_API_KEY
+          RAGFLOW_URL: !!js process.env.RAGFLOW_URL
+
+    # ---------- PDF 内容提取、表格识别 ----------
+    - id: mcp-pdf-reader
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: pdf-reader
+        transport: stdio
+        command: npx
+        args: ['-y', '@sylphx/pdf-reader-mcp']
+
+    # ---------- HTTP 网络请求、API 调用 ----------
+    - id: mcp-fetch
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: fetch
+        transport: stdio
+        command: uvx
+        args: ['mcp-server-fetch']
+
+    # ---------- Excel 表格读写、数据处理 ----------
+    - id: mcp-excel
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: excel
+        transport: stdio
+        command: npx
+        args: ['-y', 'excel-mcp-server']
+
+    # ---------- 网页内容提取、元数据解析 ----------
+    - id: mcp-web-browsing
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: web-browsing
+        transport: stdio
+        command: npx
+        args: ['-y', '@leonardocerv/web-browsing-mcp']

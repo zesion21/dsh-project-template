@@ -1,6 +1,6 @@
-# Codex
-.codex/.cache
-.codex/*.log
+# DSH
+.dsh/.cache
+.dsh/*.log
 .agents/
 
 # Node

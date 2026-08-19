@@ -1,4 +1,4 @@
-﻿# 状态文件检查钩子（由 .codex/config.toml 的 [hooks.Stop] 调用）
+﻿# 状态文件检查工具（手动运行或 CI 调用；DSH 没有 Codex 的 Stop 钩子机制）
 #
 # 逻辑：
 # - 非 Git 仓库时跳过检查（静默退出 0）
@@ -13,7 +13,7 @@ $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $cwd = (Get-Location).Path
 
-# 优先使用当前工作目录作为项目根（Codex 在项目根启动）；否则回退到脚本所在目录
+# 优先使用当前工作目录作为项目根（DSH 在项目根启动）；否则回退到脚本所在目录
 if (Test-Path (Join-Path $cwd ".git")) {
     $projectRoot = $cwd
 } else {

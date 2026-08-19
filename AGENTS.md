@@ -1,4 +1,4 @@
-# Codex 项目配置
+# DSH 项目配置
 
 ```yaml
 project_name: "{{ 项目名称 }}"
@@ -10,7 +10,7 @@ tech_stack:
   other: "{{ 其他技术：如 Docker / Redis / MinIO }}"
 ```
 
-> 提示：上面的 YAML 块只是项目元数据占位，供人工阅读和填写；Codex 读取的是本文件的正文指令。
+> 提示：上面的 YAML 块只是项目元数据占位，供人工阅读和填写；DSH 读取的是本文件的正文指令。
 
 ## 📋 项目概览
 
@@ -59,11 +59,11 @@ tech_stack:
 
 ```
 {{ 项目根目录 }}/
-├── AGENTS.md                   # Codex 项目配置（本文件）
+├── AGENTS.md                   # DSH 项目配置（本文件）
 ├── README.md                   # 项目总览和快速开始
 ├── .gitignore                  # Git 忽略配置
-├── .codex/                     # Codex 项目级配置
-│   ├── config.toml             # MCP 服务器等配置
+├── cordis.patch.yml            # MCP 服务器等配置（dsh web --patch 挂载）
+├── .dsh/                       # DSH 项目级配置
 │   └── skills/                 # 项目级技能库
 │
 ├── docs/                       # 文档目录
@@ -117,7 +117,7 @@ tech_stack:
 - 项目状态存放在 `docs/PROJECT_STATUS.md`
 - **每次完成功能、代码、文档或配置修改后，必须更新状态文件**（见硬约束 #26）
 - 更新内容：已完成功能、待开发项、阻塞问题、变更记录（追加一行）
-- `.codex/config.toml` 中的 Stop 钩子会检查：改动了其他文件但未更新状态文件时输出告警
+- `scripts/check-status.ps1` 可手动运行检查：改动了其他文件但未更新状态文件时输出告警（DSH 无钩子机制，需手动执行或在 CI 中调用）
 
 ### 文档管理
 
@@ -139,7 +139,7 @@ subject: 简短描述
 
 ## 🚀 技能（Skills）
 
-技能位于 `.codex/skills/`（项目级）或 `~/.codex/skills/`（用户级）。Codex 会根据技能的描述自动触发合适的技能；也可以在对话中直接点名技能名称来强制使用。
+技能位于 `.dsh/skills/`（项目级）或 `~/.dsh/skills/`（用户级）。DSH 会根据技能的描述自动触发合适的技能；也可以在对话中直接点名技能名称来强制使用。
 
 ### 📊 产品管理
 
@@ -187,16 +187,16 @@ subject: 简短描述
 
 ## ⚙️ MCP 服务器
 
-MCP 服务器在 `.codex/config.toml` 中配置（也可用 `codex mcp add` 命令管理）：
+MCP 服务器在项目根目录 `cordis.patch.yml` 中配置（启动时用 `dsh web --patch ./cordis.patch.yml` 挂载，可用 `dsh web --dump-config` 检查生效配置）：
 
-| 服务 | 能力 |
+| 服务（serverName） | 能力 |
 |------|------|
-| docx-mcp | Word 文档创建、填充、格式转换 |
+| docx | Word 文档创建、填充、格式转换 |
 | ragflow | RAG 知识库检索、语义搜索 |
 | pdf-reader | PDF 内容提取、表格识别 |
 | fetch | HTTP 网络请求、API 调用 |
 | excel | Excel 表格读写、数据处理 |
-| web-browsing-mcp | 网页内容提取、元数据解析 |
+| web-browsing | 网页内容提取、元数据解析 |
 
 ---
 
@@ -307,7 +307,7 @@ MCP 服务器在 `.codex/config.toml` 中配置（也可用 `codex mcp add` 命�
 2. **小步提交**：每次修改控制在合理范围，不要一次性改太多文件
 3. **上下文感知**：保持代码风格与现有项目一致，不要引入不一致的风格
 4. **主动思考**：发现潜在问题主动提出，不要等用户问
-5. **使用技能**：任务与 `.codex/skills/` 中某个技能的描述匹配时，先读取并使用对应技能
+5. **使用技能**：任务与 `.dsh/skills/` 中某个技能的描述匹配时，先读取并使用对应技能
 6. **收尾检查**：结束任务前核对 `docs/PROJECT_STATUS.md` 是否已随本次改动更新
 
 ### 输出格式
