@@ -115,3 +115,27 @@ try {
 9.  **注释要求**
     - 复杂组件（超过 150 行）顶部写一段注释说明：**用途、主要 Props、关键事件**。
     - Composables 文件必须有文件头注释说明返回值。
+
+10. **状态管理：非必要不用 store**
+    - **默认不用 store**：局部状态留在组件内（`ref` / `reactive`）或抽到 composables，**禁止**图省事把普通状态塞进 Pinia。
+    - **只有复杂组件间共享的变量才进 store**：典型是全局单例对象，如 OpenLayers 的 `map`、Cesium 的 `viewer`——需要被多个页面/组件同时访问和操作时才放进 store。
+    - 判断基准：状态只在单个页面/组件树内用 → 组件内或 composables；跨路由、跨模块长期共享 → store。拿不准时先放 composables，确认确实需要共享再上移。
+    - 进入 store 的共享实例必须保持**单例**，避免多处 `new Map()` / `new Viewer()` 导致地图、视图状态混乱。
+
+11. **复用与拆分优先 composables**
+    - 可复用的响应式逻辑（状态 + 方法）必须抽到 `src/composables/` 下的 `useXxx.ts`，禁止复制粘贴。
+    - **组件过长时优先用 composables 拆分**，而不是拆成多个只有几行的子组件：把状态与逻辑搬进 composables，让模板与 `<script setup>` 保持精简。
+    - composables 必须有文件头注释说明用途与返回值；命名统一 `useXxx`。
+
+12. **节制使用 `watch` / `computed`**
+    - `watch` / `watchEffect` / `computed` 会掩盖数据流、降低可读性，**非必要不引入**。
+    - 能在事件回调（`@click`、`@change`、接口返回处）直接处理结果的，就不要用 `watch` 去"监听变化再处理"。
+    - `computed` 仅用于"确实需要依赖缓存的派生值"，简单取值直接写函数或模板内表达式。
+    - 禁止用 `watch` 建立组件之间的隐式同步链路；需要同步就用显式的 props / emit 或 store action。
+    - 确有必要使用时，就地写一行注释说明**为什么不能用更直接的方式**。
+
+13. **新建 `.vue` 文件必须按模板结构创建**
+    - 模板文件：`.dsh/skills/frontend/reference/temp.vue`。新建任何 `.vue` 文件前先读取它，并严格沿用其结构。
+    - 骨架顺序固定：文件头注释块 → `<template>` → `<script setup lang="ts">` → `<style scoped lang="less">`。
+    - 文件头注释必须保留 `@Author` / `@Date` / `@Description` 三项：`@Date` 填实际创建时间（`YYYY-MM-DD HH:mm:ss`），`@Description` 写清文件用途。
+    - 模板根节点 id 用 `<组件名>Box`（如 `mapContainerBox`），样式块以该 id 选择器编写；样式一律 `scoped` 且 `lang="less"`。

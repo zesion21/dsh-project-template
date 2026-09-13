@@ -4,13 +4,13 @@
 
 ## ✨ 特性
 
-| 特性 | 说明 |
-|------|------|
+| 特性        | 说明                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------- |
 | 🛠 MCP 集成 | 预配置 6 个 MCP 服务器（docx、ragflow、pdf-reader、fetch、excel、web-browsing），通过 `cordis.patch.yml` 挂载 |
-| 🎯 专业技能 | 13 个技能覆盖产品、后端、前端、UI设计、内容创作等领域，存放于 `.dsh/skills/` 自动发现 |
-| 📋 规范先行 | 内置安全、代码质量、开发流程等硬约束，保证交付质量 |
-| 📁 标准结构 | 约定式项目目录结构 + 文档骨架，开箱即用 |
-| 🚀 快速上手 | 只需修改 `AGENTS.md` 中的占位符即可启动新项目 |
+| 🎯 专业技能 | 13 个技能覆盖产品、后端、前端、UI设计、内容创作等领域，存放于 `.dsh/skills/` 自动发现                         |
+| 📋 规范先行 | 内置安全、代码质量、开发流程等硬约束，保证交付质量                                                            |
+| 📁 标准结构 | 约定式项目目录结构 + 文档骨架，开箱即用                                                                       |
+| 🚀 快速上手 | 只需修改 `AGENTS.md` 中的占位符即可启动新项目                                                                 |
 
 ## 🚀 快速开始
 
@@ -78,20 +78,20 @@ your-project/
 
 技能按描述自动触发，也可在对话中直接点名使用：
 
-| 领域 | 技能 | 核心能力 |
-|------|------|----------|
-| 📊 产品 | skills-product-manager | 需求分析、PRD创作、产品规划、竞品分析 |
-| 💻 后端 | backend-midway | Midway.js + TypeScript + SQLite3 后端开发 |
-| 💻 后端 | python-pro | Python 后端、数据分析、脚本开发 |
-| 💻 后端 | postgresql-designer | 数据库设计、优化、迁移 |
-| 🎨 前端 | frontend | Vue 3 + TypeScript + Ant Design Vue 前端开发 |
-| 🎨 前端 | uniapp-architect | UniApp 跨平台应用开发 |
-| 🎨 前端 | electron | Electron 桌面应用开发 |
-| ✨ 设计 | ui-ux-pro-max | 用户体验设计、交互优化、视觉规范 |
-| ✨ 设计 | pencil-design | Pencil 原型设计工具集成 |
-| 📝 内容 | skills-ppt-designer | 演示文稿、汇报材料设计 |
-| 📝 内容 | skills-wechat-article-writer | 公众号文章、技术博客写作 |
-| 🔬 领域 | space | 航天、卫星遥感、遥感影像处理 |
+| 领域    | 技能                         | 核心能力                                     |
+| ------- | ---------------------------- | -------------------------------------------- |
+| 📊 产品 | skills-product-manager       | 需求分析、PRD创作、产品规划、竞品分析        |
+| 💻 后端 | backend-midway               | Midway.js + TypeScript + SQLite3 后端开发    |
+| 💻 后端 | python-pro                   | Python 后端、数据分析、脚本开发              |
+| 💻 后端 | postgresql-designer          | 数据库设计、优化、迁移                       |
+| 🎨 前端 | frontend                     | Vue 3 + TypeScript + Ant Design Vue 前端开发 |
+| 🎨 前端 | uniapp-architect             | UniApp 跨平台应用开发                        |
+| 🎨 前端 | electron                     | Electron 桌面应用开发                        |
+| ✨ 设计 | ui-ux-pro-max                | 用户体验设计、交互优化、视觉规范             |
+| ✨ 设计 | pencil-design                | Pencil 原型设计工具集成                      |
+| 📝 内容 | skills-ppt-designer          | 演示文稿、汇报材料设计                       |
+| 📝 内容 | skills-wechat-article-writer | 公众号文章、技术博客写作                     |
+| 🔬 领域 | space                        | 航天、卫星遥感、遥感影像处理                 |
 
 > 注：`backend` 技能也在技能库中，按需使用。
 
@@ -99,23 +99,23 @@ your-project/
 
 在项目根目录 `cordis.patch.yml` 中配置（每个服务器对应 `@deepseek-ai/dsh-mcp-client` 插件的一行，可用 `dsh web --dump-config` 检查生效配置）：
 
-| 服务（serverName） | 能力 | 模型侧工具名 |
-|------|------|------|
-| docx | Word 文档创建、填充、格式转换 | `mcp__docx__*` |
-| ragflow | RAG 知识库检索、语义搜索 | `mcp__ragflow__*` |
-| pdf-reader | PDF 内容提取、表格识别 | `mcp__pdf-reader__*` |
-| fetch | HTTP 网络请求、API 调用 | `mcp__fetch__*` |
-| excel | Excel 表格读写、数据处理 | `mcp__excel__*` |
-| web-browsing | 网页内容提取、元数据解析 | `mcp__web-browsing__*` |
+| 服务（serverName） | 能力                          | 模型侧工具名           |
+| ------------------ | ----------------------------- | ---------------------- |
+| docx               | Word 文档创建、填充、格式转换 | `mcp__docx__*`         |
+| ragflow            | RAG 知识库检索、语义搜索      | `mcp__ragflow__*`      |
+| pdf-reader         | PDF 内容提取、表格识别        | `mcp__pdf-reader__*`   |
+| fetch              | HTTP 网络请求、API 调用       | `mcp__fetch__*`        |
+| excel              | Excel 表格读写、数据处理      | `mcp__excel__*`        |
+| web-browsing       | 网页内容提取、元数据解析      | `mcp__web-browsing__*` |
 
 > 服务器命令是可信可执行代码，仅在需要时启用；密钥一律通过 `!!js process.env.XXX` 注入环境变量。
 
 ### 所需环境变量
 
-| 变量 | 服务 | 说明 |
-|------|------|------|
-| `RAGFLOW_API_KEY` | ragflow | RAG 知识库 API 密钥（必填，否则 ragflow 无法启动） |
-| `RAGFLOW_URL` | ragflow | RAG 服务地址，如 `http://192.168.10.13:9380/api/v1`（缺省时需在 patch 中填入） |
+| 变量              | 服务    | 说明                                                                           |
+| ----------------- | ------- | ------------------------------------------------------------------------------ |
+| `RAGFLOW_API_KEY` | ragflow | RAG 知识库 API 密钥（必填，否则 ragflow 无法启动）                             |
+| `RAGFLOW_URL`     | ragflow | RAG 服务地址，如 `http://192.168.10.13:9380/api/v1`（缺省时需在 patch 中填入） |
 
 ## 📋 项目状态追踪
 
@@ -155,27 +155,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-status.ps1
 
 所有 `{{ }}` 包裹的内容都需要替换：
 
-| 占位符 | 说明 | 示例 |
-|--------|------|------|
-| `{{ 项目名称 }}` | 项目的正式名称 | 用户管理系统 |
-| `{{ 项目类型 }}` | Web应用/移动端/桌面应用等 | Web应用 |
-| `{{ 前端技术栈 }}` | 前端技术组合 | Vue 3 + TypeScript + AntDV |
-| `{{ 后端技术栈 }}` | 后端技术组合 | Midway.js + TypeScript |
-| `{{ 数据库 }}` | 数据库类型 | PostgreSQL 15 |
-| `{{ 其他技术 }}` | 其他关键技术 | Docker + Redis + MinIO |
-| `{{ 简要描述项目 }}` | 一句话项目描述 | 企业级用户权限管理系统 |
-| `{{ 目标用户群体 }}` | 系统使用者 | 企业IT管理员、运营人员 |
-| `{{ v1.0.0 }}` | 版本号 | v1.0.0 |
-| `{{ 项目根目录 }}` | Git 仓库目录名 | user-management |
-| `{{ 在此添加特有约定 }}` | 项目特殊规则 | 优先兼容 Chrome 浏览器 |
-
-## 🔄 从 Codex / Claude Code 模板迁移说明
-
-| Codex / Claude Code | DSH |
-|-------------|------|
-| `CLAUDE.md` / `AGENTS.md` | `AGENTS.md`（DSH 自动读取） |
-| `.codex/config.toml` / `.mcp.json` | `cordis.patch.yml`（`dsh web --patch` 挂载） |
-| `.codex/skills/` / `.claude/skills/` | `.dsh/skills/`（项目级）或 `~/.dsh/skills/`（用户级） |
+| 占位符                   | 说明                      | 示例                       |
+| ------------------------ | ------------------------- | -------------------------- |
+| `{{ 项目名称 }}`         | 项目的正式名称            | 用户管理系统               |
+| `{{ 项目类型 }}`         | Web应用/移动端/桌面应用等 | Web应用                    |
+| `{{ 前端技术栈 }}`       | 前端技术组合              | Vue 3 + TypeScript + AntDV |
+| `{{ 后端技术栈 }}`       | 后端技术组合              | Midway.js + TypeScript     |
+| `{{ 数据库 }}`           | 数据库类型                | PostgreSQL 15              |
+| `{{ 其他技术 }}`         | 其他关键技术              | Docker + Redis + MinIO     |
+| `{{ 简要描述项目 }}`     | 一句话项目描述            | 企业级用户权限管理系统     |
+| `{{ 目标用户群体 }}`     | 系统使用者                | 企业IT管理员、运营人员     |
+| `{{ v1.0.0 }}`           | 版本号                    | v1.0.0                     |
+| `{{ 项目根目录 }}`       | Git 仓库目录名            | user-management            |
+| `{{ 在此添加特有约定 }}` | 项目特殊规则              | 优先兼容 Chrome 浏览器     |
 
 ## 📦 兼容性
 
