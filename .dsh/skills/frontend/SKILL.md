@@ -91,8 +91,9 @@ try {
     - Vue 文件（模板 + 脚本）建议 **≤ 400 行**，**1000 行是底线**，超过必须拆分。
     - 样式超过 200 行建议拆分到独立 `.scss` / `.css` 文件。
 
-4.  **JS/TS 语法规范**
-    - 全面使用 **ES6+** 语法（`const/let`、箭头函数、解构、模板字符串、`async/await`），禁止 `var`。
+4.  **JS/TS 语法规范（强制 ES6+）**
+    - **强制使用 ES6+ 语法**：`const` / `let`、箭头函数、解构、模板字符串、`async/await`、可选链 `?.`、空值合并 `??`、模块化 `import` / `export`；**禁止 `var`**。
+    - **退化到 ES5 必须汇报**：仅当目标环境或依赖确实不兼容时才可使用 ES5 写法（`function` + `var`、`arguments`、`const that = this`、回调式异步等），且必须在交付说明中写明**退化位置 + 具体原因 + 影响范围**；未汇报就使用 ES5 语法视为违规。
     - 使用 `===` / `!==`，避免 `==` / `!=`。
 
 5.  **组合式 API (Composition API)**
@@ -139,3 +140,31 @@ try {
     - 骨架顺序固定：文件头注释块 → `<template>` → `<script setup lang="ts">` → `<style scoped lang="less">`。
     - 文件头注释必须保留 `@Author` / `@Date` / `@Description` 三项：`@Date` 填实际创建时间（`YYYY-MM-DD HH:mm:ss`），`@Description` 写清文件用途。
     - 模板根节点 id 用 `<组件名>Box`（如 `mapContainerBox`），样式块以该 id 选择器编写；样式一律 `scoped` 且 `lang="less"`。
+
+14. **代码自包含：禁止为抽象而抽象**
+    - 单处使用的逻辑**就近**写在使用处（页面 / 组件 / composable 内），保证打开一个文件就能看懂一件事；**禁止**为了"看起来解耦"把一次性的取数、转换、判断拆到多个小文件，导致读实现要跨文件跳转。
+    - 允许且仅允许两种拆分理由：**真复用**（同一逻辑 ≥ 2 处使用）、**真超长**（触及第 2、3 条的行数上限）。其余情况先就地写，等第二处出现再抽（与第 11 条一致：确需拆分时优先 composables，而不是碎片化子组件）。
+    - 组织方式参照 `reference/style-sample.vue`：导入分组 → 局部状态（不进 store）→ 就近的 `async` 方法（请求、判断、提示写在一起）。该文件与 `reference/temp.vue`（空骨架模板）配套使用。
+
+15. **统一响应体 `Res<T>`（强制）**
+    - 后端所有接口统一返回下述结构，前端一律用 `Res<T>` 标注类型，**禁止**各处自定义响应类型：
+
+    ```ts
+    /*
+     * @Author: Zesion Lee
+     * @Date: 2025-07-10 14:44:14
+     * @Description: 后端统一响应体
+     */
+
+    export interface Res<T = any> {
+      code: number
+      data: T
+      msg: string
+    }
+    ```
+
+    - `code === 200` 为成功；**其余一律视为失败**（401 未登录、403 无权限、500 服务器错误、业务错误码等），只按 `code === 200` 判成功，禁止拿 `msg` 文案判断成功与否。`data` 必须用泛型标注具体业务类型（如 `Res<PgConfig>`、`Res<PgConfig[]>`），禁止 `res.data.data` 裸取后当 `any` 用。
+    - 该类型定义在 `src/types/api.ts`（`Res<T>` 与通用请求/响应类型），业务代码一律 `import type { Res } from '@/types'`。
+    - **所有响应/业务类型统一放 `src/types/`，禁止写在组件里**：按领域分文件（`api.ts` 放 `Res<T>` 等通用类型，`db.ts` / `user.ts` 放对应领域类型），由 `src/types/index.ts` 统一 re-export 作为唯一出口；组件内禁止就地手写接口返回类型或 `ref<{ ... }>` 内联结构类型。
+    - 类型文件只放类型，必须用 `import type` / `export type`，不得包含运行时代码，避免把无关模块拖进依赖图。
+    - `T = any` 是本项目对 AGENTS.md #8「禁止 `any`」的**唯一豁免**：它只是缺省泛型参数，业务代码实际取用时必须显式传入具体类型。

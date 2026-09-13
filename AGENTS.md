@@ -83,9 +83,13 @@ tech_stack:
 │   ├── package.json            # 依赖配置
 │   ├── src/                    # 源代码
 │   │   ├── components/         # 公共组件
+│   │   ├── composables/        # 组合式函数（技能 #11：可复用响应式逻辑，useXxx.ts）
 │   │   ├── views/              # 页面组件
-│   │   ├── store/              # 状态管理
-│   │   ├── api/                # API 接口
+│   │   ├── store/              # 状态管理（非必要不用，见硬约束 #14）
+│   │   ├── api/                # 业务接口函数（按模块拆分，不含拦截器）
+│   │   ├── http/               # axios 入口：默认配置与请求/响应拦截器（硬约束 #16）
+│   │   ├── types/              # 全局类型定义（Res<T> 等，按领域分文件 + index.ts 统一出口）
+│   │   ├── styles/             # 全局样式（技能 §7：全局样式只在此定义）
 │   │   └── utils/              # 工具函数
 │   └── public/                 # 静态资源
 │
@@ -235,13 +239,13 @@ MCP 服务器在项目根目录 `cordis.patch.yml` 中配置（启动时用 `dsh
 
 13. **必须遵循 `frontend` 技能（强制前置，不可跳过）**：
     - **前置动作**：`frontend/` 目录内的一切改动，动手前**必须先读取并遵循 `.dsh/skills/frontend/SKILL.md`**；未加载技能就改前端代码视为违规（改 bug、调样式、重构等小改动同样不豁免，不以改动大小跳过）
-    - **规范范围以技能为准**（本文件不重复）：页面拆分与组件提取、文件行数上限、JS/TS 语法规范、Composition API（`<script setup>`）、响应式与类型、**状态管理（非必要不用 store，仅复杂组件共享变量如全局 `map` / `viewer` 才入 store）**、**复用与拆分优先 composables**、**节制使用 `watch` / `computed`**、**新建 `.vue` 文件按模板结构创建**、样式作用域、异步错误处理、注释要求
+    - **规范范围以技能为准**（本文件不重复）：页面拆分与组件提取、文件行数上限、**JS/TS 语法规范（强制 ES6+，退化到 ES5 必须汇报）**、Composition API（`<script setup>`）、响应式与类型、**状态管理（非必要不用 store，仅复杂组件共享变量如全局 `map` / `viewer` 才入 store）**、**复用与拆分优先 composables**、**代码自包含（就地实现，禁止为抽象而抽象、禁止让人跨文件找实现）**、**节制使用 `watch` / `computed`**、**新建 `.vue` 文件按模板结构创建**（骨架 `reference/temp.vue`、风格示例 `reference/style-sample.vue`）、**类型集中放 `src/types/`（`Res<T>` 等响应/业务类型，禁止在组件内就地声明）**、样式作用域、异步错误处理、注释要求
     - **级别拉平**：技能中标注「（推荐）」的规范，在本项目中一律按**必须**执行
     - **冲突处理**：技能与本文件（含 #14–#16 前端铁律）不一致时取**更严格**者；两者结论相反且都很硬时，停下来问，禁止自行挑选
     - **技能不可用**（文件缺失/读取失败）：先说明情况，再按本文件 + 框架通用最佳实践执行，并在交付说明中标注
 14. **跨组件共享状态使用 Pinia（非必要不用 store）**：仅复杂组件间共享的变量才进 store（如全局 `map` / `viewer`），禁止滥用全局状态；落地细则见技能 #10
 15. **禁止在组件中直接修改 store 状态**：必须经由 store 暴露的 action 变更（技能未涵盖，保留在本文件）
-16. **异步请求统一封装**：统一请求拦截器集中处理 Token、错误、loading（技能仅覆盖 try/catch 与加载/错误提示，封装层约定保留在本文件）
+16. **请求直接用 axios 默认实例（禁止自研封装、禁止多余的 `create`）**：业务代码直接调用 `axios.get` / `axios.post` / `axios.put` / `axios.delete`；Token 注入、错误提示、loading 等统一在**一处**注册——`axios.interceptors.request / response.use()` 与 `axios.defaults.*`（入口固定为 `src/http/index.ts`，在 `main.ts` 里引入一次即可全局生效）。禁止再包一层自研 `request` / `get` / `post` 封装，也禁止到处 `axios.create()` 造多实例
 
 ### 🖥️ 后端约束
 
@@ -251,8 +255,9 @@ MCP 服务器在项目根目录 `cordis.patch.yml` 中配置（启动时用 `dsh
     - Repository：数据访问，禁止在 Service 中直接写 SQL
 18. **接口规范**：
     - RESTful 风格：GET(查询) / POST(新增) / PUT(修改) / DELETE(删除)
-    - 统一响应格式：`{ code: number, message: string, data: any }`
-    - 统一错误码：业务错误码 ≥ 10000，系统错误 < 10000
+    - 统一响应格式：`{ code: number, msg: string, data: any }`（前端类型即技能 #15 的 `Res<T>`）
+    - **成功码固定 `200`，其余 code 一律视为失败**（401 未登录、403 无权限、500 服务器错误等）；前端只按 `code === 200` 判成功，禁止拿 `msg` 文案判断成功与否
+    - 业务自定义错误码从 ≥ 10000 起分配，避免与上述语义码冲突
 19. **数据库约束**：
     - 所有表必须有主键、创建时间、更新时间字段
     - 关联字段必须加索引
