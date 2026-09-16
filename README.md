@@ -7,7 +7,7 @@
 | 特性 | 说明 |
 |------|------|
 | 🛠 MCP 集成 | 预配置 6 个 MCP 服务器（docx、ragflow、pdf-reader、fetch、excel、web-browsing），通过 `cordis.patch.yml` 挂载 |
-| 🎯 专业技能 | 13 个技能覆盖产品、后端、前端、UI设计、内容创作等领域，存放于 `.dsh/skills/` 自动发现 |
+| 🎯 专业技能 | 14 个技能覆盖产品、后端、前端、UI设计、内容创作等领域，存放于 `.dsh/skills/` 自动发现 |
 | 📋 规范先行 | 内置安全、代码质量、开发流程等硬约束，保证交付质量 |
 | 📁 标准结构 | 约定式项目目录结构 + 文档骨架，开箱即用 |
 | 🚀 快速上手 | 只需修改 `AGENTS.md` 中的占位符即可启动新项目 |
@@ -89,6 +89,7 @@ your-project/
 | 🎨 前端 | electron | Electron 桌面应用开发 |
 | ✨ 设计 | ui-ux-pro-max | 用户体验设计、交互优化、视觉规范 |
 | ✨ 设计 | pencil-design | Pencil 原型设计工具集成 |
+| 📝 内容 | skills-doc-writer | 技术方案、项目建议书、可研报告、投标技术方案编写 |
 | 📝 内容 | skills-ppt-designer | 演示文稿、汇报材料设计 |
 | 📝 内容 | skills-wechat-article-writer | 公众号文章、技术博客写作 |
 | 🔬 领域 | space | 航天、卫星遥感、遥感影像处理 |
